@@ -31,6 +31,7 @@ defineEmits(['update:modelValue'])
         />
       </svg>
 
+      <label for="stock-search" class="sr-only">Aktie suchen</label>
       <input
         id="stock-search"
         type="text"
@@ -50,7 +51,7 @@ defineEmits(['update:modelValue'])
       </button>
     </div>
 
-    <span v-if="modelValue" class="search-bar__count">
+    <span v-if="modelValue" class="search-bar__count" aria-live="polite">
       {{ resultCount }} {{ resultCount === 1 ? 'Ergebnis' : 'Ergebnisse' }}
     </span>
   </div>
@@ -128,6 +129,11 @@ defineEmits(['update:modelValue'])
 .search-bar__clear:hover {
   color: #f1f5f9;
   background: rgba(255, 255, 255, 0.08);
+}
+
+.search-bar__clear:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
 }
 
 /* ======================================================

@@ -70,9 +70,9 @@ const chartOptions = {
 
 <template>
   <div class="chart-container">
-    <h3 class="chart-title">{{ title }}</h3>
+    <h3 :id="`chart-title-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`" class="chart-title">{{ title }}</h3>
     <div class="chart-wrapper">
-      <Bar :data="chartData" :options="chartOptions" :plugins="[ChartDataLabels]" />
+      <Bar :data="chartData" :options="chartOptions" :plugins="[ChartDataLabels]" role="img" :aria-labelledby="`chart-title-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`" />
     </div>
   </div>
 </template>

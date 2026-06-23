@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div class="company-card">
     <div class="card-header">
-      <img :src="`/stock-icons/${stock.icon}`" :alt="stock.name" class="company-logo" />
+      <img :src="`/stock-icons/${stock.icon}`" alt="" aria-hidden="true" class="company-logo" />
       <span class="company-name">{{ stock.name }}</span>
     </div>
     
@@ -20,11 +20,13 @@ defineProps({
         <span class="revenue-main">{{ stock.revenue }}</span>
         <div class="growth-container" :class="stock.growthAbs >= 0 ? 'growth-positive' : 'growth-negative'">
           <span class="growth-abs">
-            {{ stock.growthAbs >= 0 ? '+' : '' }}{{ stock.growthAbs }} 
-            {{ stock.growthAbs >= 0 ? '↑' : '↓' }}
+            <span class="sr-only">{{ stock.growthAbs >= 0 ? 'Increase of ' : 'Decrease of ' }}</span>
+            <span aria-hidden="true">{{ stock.growthAbs >= 0 ? '+' : '' }}</span>{{ stock.growthAbs }} 
+            <span aria-hidden="true">{{ stock.growthAbs >= 0 ? '↑' : '↓' }}</span>
           </span>
           <span class="growth-pct">
-            {{ stock.growthPct >= 0 ? '+' : '' }}{{ stock.growthPct }} %
+            <span class="sr-only">{{ stock.growthPct >= 0 ? 'Increase of ' : 'Decrease of ' }}</span>
+            <span aria-hidden="true">{{ stock.growthPct >= 0 ? '+' : '' }}</span>{{ stock.growthPct }} %
           </span>
         </div>
       </div>

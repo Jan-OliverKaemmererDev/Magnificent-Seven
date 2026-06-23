@@ -168,11 +168,11 @@ const scrollLeft = () => {
     </header>
 
     <main class="dashboard-content">
-      <div v-if="isLoading" class="state-message">
-        <div class="spinner"></div>
+      <div v-if="isLoading" class="state-message" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
         <p>Lade echte Finanzdaten...</p>
       </div>
-      <div v-else-if="error" class="state-message error">
+      <div v-else-if="error" class="state-message error" role="alert" aria-live="assertive">
         <p>{{ error }}</p>
       </div>
       <template v-else>
@@ -231,7 +231,7 @@ const scrollLeft = () => {
 
 <style>
 /* ======================================================
-   Global Resets
+   Global Resets & Accessibility
    ====================================================== */
 body {
   margin: 0;
@@ -243,6 +243,19 @@ body {
 
 #app {
   min-height: 100vh;
+}
+
+/* sr-only class for accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 </style>
 
@@ -341,6 +354,11 @@ body {
 .scroll-arrow:hover {
   background-color: #0ea5e9;
   transform: scale(1.05);
+}
+
+.scroll-arrow:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
 /* ======================================================

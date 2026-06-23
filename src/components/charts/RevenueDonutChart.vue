@@ -46,9 +46,9 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="chart-container">
-    <h3 class="chart-title">Revenue Breakdown Magnificent Seven</h3>
+    <h3 id="revenue-donut-title" class="chart-title">Revenue Breakdown Magnificent Seven</h3>
     <div class="chart-wrapper">
-      <Doughnut :data="chartData" :options="chartOptions" />
+      <Doughnut :data="chartData" :options="chartOptions" role="img" aria-labelledby="revenue-donut-title" />
     </div>
     <p class="chart-subtitle">in Billion USD TTM</p>
   </div>

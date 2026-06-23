@@ -91,9 +91,9 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="chart-container">
-    <h3 class="chart-title">Revenue last 3 years</h3>
+    <h3 id="revenue-line-title" class="chart-title">Revenue last 3 years</h3>
     <div class="chart-wrapper">
-      <Line :data="chartData" :options="chartOptions" />
+      <Line :data="chartData" :options="chartOptions" role="img" aria-labelledby="revenue-line-title" />
     </div>
   </div>
 </template>

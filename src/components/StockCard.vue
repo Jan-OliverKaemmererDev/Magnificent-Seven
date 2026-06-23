@@ -17,7 +17,8 @@ defineProps({
       <img
         v-if="stock.iconPath"
         :src="stock.iconPath"
-        :alt="stock.companyName + ' Logo'"
+        alt=""
+        aria-hidden="true"
         class="stock-card__logo"
       />
       <span v-else class="stock-card__ticker-badge">
