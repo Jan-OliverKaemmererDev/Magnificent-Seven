@@ -34,6 +34,9 @@ defineProps({
 </template>
 
 <style scoped>
+/* ======================================================
+   Card Container
+   ====================================================== */
 .company-card {
   background-color: #111c2a;
   border-radius: 12px;
@@ -45,6 +48,9 @@ defineProps({
   gap: 1rem;
 }
 
+/* ======================================================
+   Card Header
+   ====================================================== */
 .card-header {
   display: flex;
   align-items: center;
@@ -62,6 +68,9 @@ defineProps({
   color: #ffffff;
 }
 
+/* ======================================================
+   Card Body
+   ====================================================== */
 .card-body {
   display: flex;
   flex-direction: column;
@@ -85,6 +94,15 @@ defineProps({
   color: #ffffff;
 }
 
+.revenue-unit {
+  font-size: 0.65rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ======================================================
+   Growth Indicators
+   ====================================================== */
 .growth-container {
   display: flex;
   flex-direction: column;
@@ -98,11 +116,5 @@ defineProps({
 
 .growth-negative {
   color: #ef4444;
-}
-
-.revenue-unit {
-  font-size: 0.65rem;
-  color: #6b7280;
-  margin: 0;
 }
 </style>

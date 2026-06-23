@@ -16,7 +16,6 @@ defineProps({
     <div class="app-header__content">
       <div class="app-header__brand">
         <div class="app-header__logo-mark">
-          <!-- 7 dots representing the Magnificent Seven -->
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <circle cx="16" cy="6" r="3" fill="#60a5fa" opacity="1" />
             <circle cx="8" cy="12" r="2.5" fill="#60a5fa" opacity="0.7" />
@@ -47,6 +46,9 @@ defineProps({
 </template>
 
 <style scoped>
+/* ======================================================
+   Header Layout
+   ====================================================== */
 .app-header {
   padding: 1.5rem 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -61,6 +63,9 @@ defineProps({
   gap: 1rem;
 }
 
+/* ======================================================
+   Brand
+   ====================================================== */
 .app-header__brand {
   display: flex;
   align-items: center;
@@ -72,6 +77,9 @@ defineProps({
   opacity: 0.9;
 }
 
+/* ======================================================
+   Titles
+   ====================================================== */
 .app-header__titles {
   display: flex;
   flex-direction: column;
@@ -96,7 +104,9 @@ defineProps({
   text-transform: uppercase;
 }
 
-/* Meta section */
+/* ======================================================
+   Meta Section
+   ====================================================== */
 .app-header__meta {
   display: flex;
   align-items: center;
@@ -113,6 +123,9 @@ defineProps({
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* ======================================================
+   Loading State
+   ====================================================== */
 .app-header__loading-badge {
   display: flex;
   align-items: center;
@@ -136,6 +149,9 @@ defineProps({
   }
 }
 
+/* ======================================================
+   Responsive
+   ====================================================== */
 @media (max-width: 640px) {
   .app-header {
     padding: 1rem 1.25rem;

@@ -13,7 +13,6 @@ defineProps({
 
 <template>
   <div class="stock-card" :class="{ 'stock-card--featured': featured }">
-    <!-- Icon / Ticker badge -->
     <div class="stock-card__icon-area">
       <img
         v-if="stock.iconPath"
@@ -26,18 +25,19 @@ defineProps({
       </span>
     </div>
 
-    <!-- Info -->
     <div class="stock-card__info">
       <span class="stock-card__ticker">{{ stock.ticker }}</span>
       <span class="stock-card__name">{{ stock.companyName }}</span>
     </div>
 
-    <!-- Mag7 badge -->
     <span v-if="stock.isMag7" class="stock-card__mag7-badge">MAG 7</span>
   </div>
 </template>
 
 <style scoped>
+/* ======================================================
+   Base Card
+   ====================================================== */
 .stock-card {
   display: flex;
   align-items: center;
@@ -52,6 +52,9 @@ defineProps({
   overflow: hidden;
 }
 
+/* ======================================================
+   Hover Effects
+   ====================================================== */
 .stock-card::before {
   content: '';
   position: absolute;
@@ -76,7 +79,9 @@ defineProps({
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
-/* Featured variant (for Mag7 hero section) */
+/* ======================================================
+   Featured Variant
+   ====================================================== */
 .stock-card--featured {
   padding: 1.25rem 1.5rem;
   background: linear-gradient(
@@ -92,7 +97,9 @@ defineProps({
   box-shadow: 0 12px 32px rgba(6, 50, 110, 0.35);
 }
 
-/* Icon area */
+/* ======================================================
+   Icon Area
+   ====================================================== */
 .stock-card__icon-area {
   flex-shrink: 0;
   width: 40px;
@@ -134,7 +141,9 @@ defineProps({
   letter-spacing: 0.02em;
 }
 
-/* Info */
+/* ======================================================
+   Info Section
+   ====================================================== */
 .stock-card__info {
   display: flex;
   flex-direction: column;
@@ -167,7 +176,9 @@ defineProps({
   color: #94a3b8;
 }
 
-/* MAG 7 badge */
+/* ======================================================
+   MAG 7 Badge
+   ====================================================== */
 .stock-card__mag7-badge {
   flex-shrink: 0;
   font-size: 0.625rem;

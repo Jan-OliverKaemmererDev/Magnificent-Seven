@@ -20,6 +20,19 @@ const props = defineProps({
   }
 })
 
+/**
+ * Formats a chart data value for the datalabel display.
+ * Appends a percent sign when the chart title contains "%".
+ * @param {number|string} value - The raw data value from the chart.
+ * @returns {string} The formatted display string.
+ */
+function formatDataLabel(value) {
+  if (props.title.includes('%')) {
+    return `${value}%`
+  }
+  return value
+}
+
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -31,18 +44,13 @@ const chartOptions = {
       labels: { color: '#9ca3af', font: { family: 'Rubik' } }
     },
     datalabels: {
-      display: props.horizontal, // Only show for horizontal bar charts as per mockup
+      display: props.horizontal,
       color: '#ffffff',
       anchor: 'end',
       align: 'start',
       offset: 4,
       font: { family: 'Rubik', size: 10 },
-      formatter: (value) => {
-        if (props.title.includes('%')) {
-          return `${value}%`
-        }
-        return value
-      }
+      formatter: formatDataLabel
     }
   },
   scales: {
@@ -70,6 +78,9 @@ const chartOptions = {
 </template>
 
 <style scoped>
+/* ======================================================
+   Container
+   ====================================================== */
 .chart-container {
   background-color: #111c2a;
   border-radius: 12px;
@@ -80,12 +91,9 @@ const chartOptions = {
   height: 100%;
 }
 
-@media (max-width: 768px) {
-  .chart-container {
-    padding: 1rem;
-  }
-}
-
+/* ======================================================
+   Title
+   ====================================================== */
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;
@@ -93,9 +101,22 @@ const chartOptions = {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
+/* ======================================================
+   Chart Wrapper
+   ====================================================== */
 .chart-wrapper {
   flex-grow: 1;
   position: relative;
   height: 300px;
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
 }
 </style>

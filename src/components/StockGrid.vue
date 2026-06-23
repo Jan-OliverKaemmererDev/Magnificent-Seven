@@ -39,12 +39,18 @@ defineProps({
 </template>
 
 <style scoped>
+/* ======================================================
+   Container
+   ====================================================== */
 .stock-grid {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
+/* ======================================================
+   Header
+   ====================================================== */
 .stock-grid__header {
   display: flex;
   align-items: center;
@@ -67,7 +73,9 @@ defineProps({
   color: #94a3b8;
 }
 
-/* Grid layouts */
+/* ======================================================
+   Grid Layout
+   ====================================================== */
 .stock-grid__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -79,6 +87,9 @@ defineProps({
   gap: 0.75rem;
 }
 
+/* ======================================================
+   Responsive
+   ====================================================== */
 @media (max-width: 640px) {
   .stock-grid__list,
   .stock-grid__list--featured {

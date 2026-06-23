@@ -34,6 +34,26 @@ const props = defineProps({
   }
 })
 
+/**
+ * Generates custom legend labels with white stroke styling.
+ * @param {Object} chart - The Chart.js chart instance.
+ * @returns {Object[]} Array of label configuration objects with white borders.
+ */
+function generateCustomLabels(chart) {
+  const original = ChartJS.defaults.plugins.legend.labels.generateLabels;
+  const labels = original(chart);
+  labels.forEach(label => {
+    label.strokeStyle = '#ffffff';
+    label.lineWidth = 1;
+  });
+  return labels;
+}
+
+/**
+ * Computed Chart.js options for the revenue line chart.
+ * Dynamically adjusts legend position based on the legendPosition prop.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
@@ -43,15 +63,7 @@ const chartOptions = computed(() => ({
       labels: { 
         color: '#9ca3af', 
         font: { family: 'Rubik' },
-        generateLabels: (chart) => {
-          const original = ChartJS.defaults.plugins.legend.labels.generateLabels;
-          const labels = original(chart);
-          labels.forEach(label => {
-            label.strokeStyle = '#ffffff';
-            label.lineWidth = 1;
-          });
-          return labels;
-        }
+        generateLabels: generateCustomLabels
       }
     },
     datalabels: {
@@ -87,6 +99,9 @@ const chartOptions = computed(() => ({
 </template>
 
 <style scoped>
+/* ======================================================
+   Container
+   ====================================================== */
 .chart-container {
   background-color: #111c2a;
   border-radius: 12px;
@@ -97,12 +112,9 @@ const chartOptions = computed(() => ({
   height: 100%;
 }
 
-@media (max-width: 768px) {
-  .chart-container {
-    padding: 1rem;
-  }
-}
-
+/* ======================================================
+   Title
+   ====================================================== */
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;
@@ -110,9 +122,22 @@ const chartOptions = computed(() => ({
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
+/* ======================================================
+   Chart Wrapper
+   ====================================================== */
 .chart-wrapper {
   flex-grow: 1;
   position: relative;
   height: 300px;
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
 }
 </style>

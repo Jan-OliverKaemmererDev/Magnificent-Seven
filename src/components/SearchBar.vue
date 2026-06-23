@@ -16,7 +16,6 @@ defineEmits(['update:modelValue'])
 <template>
   <div class="search-bar">
     <div class="search-bar__input-wrapper">
-      <!-- Search icon -->
       <svg
         class="search-bar__icon"
         xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +40,6 @@ defineEmits(['update:modelValue'])
         @input="$emit('update:modelValue', $event.target.value)"
       />
 
-      <!-- Clear button -->
       <button
         v-if="modelValue"
         class="search-bar__clear"
@@ -59,6 +57,9 @@ defineEmits(['update:modelValue'])
 </template>
 
 <style scoped>
+/* ======================================================
+   Container
+   ====================================================== */
 .search-bar {
   display: flex;
   flex-direction: column;
@@ -67,6 +68,9 @@ defineEmits(['update:modelValue'])
   max-width: 480px;
 }
 
+/* ======================================================
+   Input Wrapper
+   ====================================================== */
 .search-bar__input-wrapper {
   display: flex;
   align-items: center;
@@ -88,6 +92,9 @@ defineEmits(['update:modelValue'])
   color: #64748b;
 }
 
+/* ======================================================
+   Input Field
+   ====================================================== */
 .search-bar__input {
   flex-grow: 1;
   background: none;
@@ -103,6 +110,9 @@ defineEmits(['update:modelValue'])
   color: #475569;
 }
 
+/* ======================================================
+   Clear Button
+   ====================================================== */
 .search-bar__clear {
   flex-shrink: 0;
   background: none;
@@ -120,6 +130,9 @@ defineEmits(['update:modelValue'])
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* ======================================================
+   Result Count
+   ====================================================== */
 .search-bar__count {
   font-size: 0.8125rem;
   color: #64748b;

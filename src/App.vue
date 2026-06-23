@@ -20,6 +20,10 @@ const {
 
 const isMobile = ref(false);
 
+/**
+ * Updates the isMobile ref based on the current viewport width.
+ * Breakpoint is 768px.
+ */
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768;
 };
@@ -35,29 +39,46 @@ onUnmounted(() => {
 });
 
 const colors = [
-  '#38bdf8', // Light blue
-  '#0284c7', // Darker blue
-  '#0ea5e9', // Blue
-  '#7dd3fc', // Very light blue
-  '#0369a1', // Deep blue
-  '#bae6fd', // Pale blue
-  '#00d2ff'  // Cyan
+  '#38bdf8',
+  '#0284c7',
+  '#0ea5e9',
+  '#7dd3fc',
+  '#0369a1',
+  '#bae6fd',
+  '#00d2ff'
 ];
 
+/**
+ * Appends the latest revenue value to each dataset label for the legend.
+ * @param {Object} ds - A single chart.js dataset object.
+ * @param {number} colorIndex - The index for color assignment.
+ * @returns {Object} A dataset object with color and updated label.
+ */
+function buildLineDataset(ds, colorIndex) {
+  const latestValue = ds.data.length > 0 ? ds.data[ds.data.length - 1] : '';
+  return {
+    label: `${ds.label} ${latestValue}`,
+    data: ds.data,
+    borderColor: colors[colorIndex % colors.length],
+    backgroundColor: colors[colorIndex % colors.length],
+  };
+}
+
+/**
+ * Computed chart data for the revenue history line chart.
+ * Each dataset includes the latest value appended to the legend label.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const lineChartData = computed(() => ({
   labels: revenueHistoryData.value.labels,
-  datasets: revenueHistoryData.value.datasets.map((ds, i) => {
-    // Append the latest value to the label
-    const latestValue = ds.data.length > 0 ? ds.data[ds.data.length - 1] : '';
-    return {
-      label: `${ds.label} ${latestValue}`,
-      data: ds.data,
-      borderColor: colors[i % colors.length],
-      backgroundColor: colors[i % colors.length],
-    };
-  })
+  datasets: revenueHistoryData.value.datasets.map((ds, i) => buildLineDataset(ds, i))
 }));
 
+/**
+ * Computed chart data for the revenue breakdown donut chart.
+ * Labels include their corresponding data values.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const donutChartData = computed(() => {
   const labelsWithData = revenueBreakdownData.value.labels.map((label, idx) => {
     return `${label} ${revenueBreakdownData.value.data[idx]}`;
@@ -72,6 +93,10 @@ const donutChartData = computed(() => {
   };
 });
 
+/**
+ * Computed chart data for the net income horizontal bar chart.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const netIncomeChartData = computed(() => ({
   labels: netIncomeData.value.labels,
   datasets: [{
@@ -83,6 +108,10 @@ const netIncomeChartData = computed(() => ({
   }]
 }));
 
+/**
+ * Computed chart data for the gross margin horizontal bar chart.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const grossMarginChartData = computed(() => ({
   labels: grossMarginData.value.labels,
   datasets: [{
@@ -94,6 +123,11 @@ const grossMarginChartData = computed(() => ({
   }]
 }));
 
+/**
+ * Computed chart data for the revenue growth grouped bar chart.
+ * Each dataset represents one quarter with per-company growth values.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const revenueGrowthChartData = computed(() => ({
   labels: revenueGrowthData.value.labels,
   datasets: revenueGrowthData.value.datasets.map((ds, i) => ({
@@ -107,12 +141,18 @@ const revenueGrowthChartData = computed(() => ({
 
 const cardsContainer = ref(null);
 
+/**
+ * Scrolls the cards container 250px to the right with smooth animation.
+ */
 const scrollRight = () => {
   if (cardsContainer.value) {
     cardsContainer.value.scrollBy({ left: 250, behavior: 'smooth' });
   }
 };
 
+/**
+ * Scrolls the cards container 250px to the left with smooth animation.
+ */
 const scrollLeft = () => {
   if (cardsContainer.value) {
     cardsContainer.value.scrollBy({ left: -250, behavior: 'smooth' });
@@ -136,7 +176,6 @@ const scrollLeft = () => {
         <p>{{ error }}</p>
       </div>
       <template v-else>
-        <!-- Top Row: Horizontal scroll of cards -->
       <div class="cards-wrapper">
         <button class="scroll-arrow arrow-left" @click="scrollLeft" aria-label="Scroll left">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -155,7 +194,6 @@ const scrollLeft = () => {
         </button>
       </div>
 
-      <!-- Middle Row: Line Chart + Donut -->
       <section class="charts-middle">
         <RevenueLineChart 
           :chartData="lineChartData" 
@@ -169,7 +207,6 @@ const scrollLeft = () => {
         />
       </section>
 
-      <!-- Bottom Row: Bar Charts -->
       <section class="charts-bottom">
         <SharedBarChart 
           title="Net Income TTM" 
@@ -193,7 +230,9 @@ const scrollLeft = () => {
 </template>
 
 <style>
-/* Global Resets */
+/* ======================================================
+   Global Resets
+   ====================================================== */
 body {
   margin: 0;
   padding: 0;
@@ -208,6 +247,9 @@ body {
 </style>
 
 <style scoped>
+/* ======================================================
+   Layout
+   ====================================================== */
 .dashboard-wrapper {
   max-width: 1600px;
   margin: 0 auto;
@@ -217,6 +259,15 @@ body {
   gap: 2rem;
 }
 
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ======================================================
+   Header
+   ====================================================== */
 .header {
   display: flex;
   align-items: center;
@@ -236,17 +287,9 @@ body {
   margin: 0;
 }
 
-.dashboard-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* Fix chart blow-out on small screens */
-.charts-middle > *, .charts-bottom > * {
-  min-width: 0;
-}
-
+/* ======================================================
+   Cards Section
+   ====================================================== */
 .cards-wrapper {
   position: relative;
   display: flex;
@@ -258,15 +301,17 @@ body {
   gap: 1.5rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
-  /* hide scrollbar */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .cards-section::-webkit-scrollbar {
   display: none;
 }
 
+/* ======================================================
+   Scroll Arrows
+   ====================================================== */
 .scroll-arrow {
   position: absolute;
   display: flex;
@@ -298,10 +343,17 @@ body {
   transform: scale(1.05);
 }
 
+/* ======================================================
+   Chart Grids
+   ====================================================== */
 .charts-middle {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1.5rem;
+}
+
+.charts-middle > *, .charts-bottom > * {
+  min-width: 0;
 }
 
 .charts-bottom {
@@ -311,6 +363,43 @@ body {
   margin-top: 2rem;
 }
 
+/* ======================================================
+   State Messages
+   ====================================================== */
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #38bdf8;
+  font-size: 1.2rem;
+}
+
+.state-message.error {
+  color: #ef4444;
+}
+
+/* ======================================================
+   Spinner
+   ====================================================== */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(56, 189, 248, 0.2);
+  border-left-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
 @media (max-width: 1024px) {
   .charts-middle {
     grid-template-columns: 1fr;
@@ -330,33 +419,5 @@ body {
   .scroll-arrow {
     display: none;
   }
-}
-
-.state-message {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #38bdf8;
-  font-size: 1.2rem;
-}
-
-.state-message.error {
-  color: #ef4444;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(56, 189, 248, 0.2);
-  border-left-color: #38bdf8;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 </style>

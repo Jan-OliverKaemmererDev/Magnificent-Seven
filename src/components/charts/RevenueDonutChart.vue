@@ -17,6 +17,11 @@ const props = defineProps({
   }
 })
 
+/**
+ * Computed Chart.js options for the revenue donut chart.
+ * Dynamically adjusts legend position based on the legendPosition prop.
+ * @type {import('vue').ComputedRef<Object>}
+ */
 const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
@@ -50,6 +55,9 @@ const chartOptions = computed(() => ({
 </template>
 
 <style scoped>
+/* ======================================================
+   Container
+   ====================================================== */
 .chart-container {
   background-color: #111c2a;
   border-radius: 12px;
@@ -60,12 +68,9 @@ const chartOptions = computed(() => ({
   height: 100%;
 }
 
-@media (max-width: 768px) {
-  .chart-container {
-    padding: 1rem;
-  }
-}
-
+/* ======================================================
+   Title
+   ====================================================== */
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;
@@ -74,16 +79,33 @@ const chartOptions = computed(() => ({
   margin-bottom: 1rem;
   text-align: center;
 }
+
+/* ======================================================
+   Chart Wrapper
+   ====================================================== */
 .chart-wrapper {
   flex-grow: 1;
   position: relative;
   height: 300px;
 }
+
+/* ======================================================
+   Subtitle
+   ====================================================== */
 .chart-subtitle {
   color: #6b7280;
   font-size: 0.75rem;
   text-align: right;
   margin-bottom: 0;
   margin-top: 0.5rem;
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
 }
 </style>
