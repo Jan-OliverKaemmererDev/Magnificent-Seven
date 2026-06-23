@@ -1,18 +1,26 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import CompanyCard from './components/CompanyCard.vue'
 import RevenueLineChart from './components/charts/RevenueLineChart.vue'
 import RevenueDonutChart from './components/charts/RevenueDonutChart.vue'
 import SharedBarChart from './components/charts/SharedBarChart.vue'
+import { useAlphaVantage } from './composables/useAlphaVantage'
 
-import {
-  topCardsData,
-  revenueBreakdownData,
-  netIncomeData,
-  grossMarginData,
-  revenueGrowthData,
-  revenueHistoryData
-} from './data/mockData'
+const { 
+  isLoading, 
+  error, 
+  loadData, 
+  topCardsData, 
+  revenueBreakdownData, 
+  netIncomeData, 
+  grossMarginData, 
+  revenueGrowthData, 
+  revenueHistoryData 
+} = useAlphaVantage();
+
+onMounted(() => {
+  loadData();
+});
 
 const colors = [
   '#38bdf8', // Light blue
@@ -25,48 +33,63 @@ const colors = [
 ];
 
 const lineChartData = computed(() => ({
-  labels: revenueHistoryData.labels,
-  datasets: revenueHistoryData.datasets.map((ds, i) => ({
-    label: ds.label,
-    data: ds.data,
-    borderColor: colors[i % colors.length],
-    backgroundColor: colors[i % colors.length],
-  }))
+  labels: revenueHistoryData.value.labels,
+  datasets: revenueHistoryData.value.datasets.map((ds, i) => {
+    // Append the latest value to the label
+    const latestValue = ds.data.length > 0 ? ds.data[ds.data.length - 1] : '';
+    return {
+      label: `${ds.label} ${latestValue}`,
+      data: ds.data,
+      borderColor: colors[i % colors.length],
+      backgroundColor: colors[i % colors.length],
+    };
+  })
 }));
 
-const donutChartData = computed(() => ({
-  labels: revenueBreakdownData.labels,
-  datasets: [{
-    data: revenueBreakdownData.data,
-    backgroundColor: colors,
-    hoverOffset: 4
-  }]
-}));
+const donutChartData = computed(() => {
+  const labelsWithData = revenueBreakdownData.value.labels.map((label, idx) => {
+    return `${label} ${revenueBreakdownData.value.data[idx]}`;
+  });
+  return {
+    labels: labelsWithData,
+    datasets: [{
+      data: revenueBreakdownData.value.data,
+      backgroundColor: colors,
+      hoverOffset: 4
+    }]
+  };
+});
 
 const netIncomeChartData = computed(() => ({
-  labels: netIncomeData.labels,
+  labels: netIncomeData.value.labels,
   datasets: [{
     label: 'Net Income TTM',
-    data: netIncomeData.data,
-    backgroundColor: '#0ea5e9'
+    data: netIncomeData.value.data,
+    backgroundColor: '#0ea5e9',
+    borderColor: '#ffffff',
+    borderWidth: 1
   }]
 }));
 
 const grossMarginChartData = computed(() => ({
-  labels: grossMarginData.labels,
+  labels: grossMarginData.value.labels,
   datasets: [{
     label: 'Gross Margin %',
-    data: grossMarginData.data,
-    backgroundColor: '#0ea5e9'
+    data: grossMarginData.value.data,
+    backgroundColor: '#0ea5e9',
+    borderColor: '#ffffff',
+    borderWidth: 1
   }]
 }));
 
 const revenueGrowthChartData = computed(() => ({
-  labels: revenueGrowthData.labels,
-  datasets: revenueGrowthData.datasets.map((ds, i) => ({
+  labels: revenueGrowthData.value.labels,
+  datasets: revenueGrowthData.value.datasets.map((ds, i) => ({
     label: ds.label,
     data: ds.data,
-    backgroundColor: colors[i % colors.length]
+    backgroundColor: colors[i % colors.length],
+    borderColor: '#ffffff',
+    borderWidth: 1
   }))
 }));
 
@@ -93,7 +116,15 @@ const scrollLeft = () => {
     </header>
 
     <main class="dashboard-content">
-      <!-- Top Row: Horizontal scroll of cards -->
+      <div v-if="isLoading" class="state-message">
+        <div class="spinner"></div>
+        <p>Lade echte Finanzdaten...</p>
+      </div>
+      <div v-else-if="error" class="state-message error">
+        <p>{{ error }}</p>
+      </div>
+      <template v-else>
+        <!-- Top Row: Horizontal scroll of cards -->
       <div class="cards-wrapper">
         <button class="scroll-arrow arrow-left" @click="scrollLeft" aria-label="Scroll left">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,6 +167,7 @@ const scrollLeft = () => {
           class="chart-growth" 
         />
       </section>
+      </template>
     </main>
   </div>
 </template>
@@ -182,6 +214,12 @@ body {
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .cards-wrapper {
@@ -245,6 +283,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
   gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 @media (max-width: 1024px) {
@@ -254,5 +293,33 @@ body {
   .charts-bottom {
     grid-template-columns: 1fr;
   }
+}
+
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #38bdf8;
+  font-size: 1.2rem;
+}
+
+.state-message.error {
+  color: #ef4444;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(56, 189, 248, 0.2);
+  border-left-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>

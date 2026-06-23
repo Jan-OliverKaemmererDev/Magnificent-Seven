@@ -1,6 +1,7 @@
 <script setup>
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -28,16 +29,32 @@ const chartOptions = {
       display: !props.horizontal,
       position: 'right',
       labels: { color: '#9ca3af', font: { family: 'Rubik' } }
+    },
+    datalabels: {
+      display: props.horizontal, // Only show for horizontal bar charts as per mockup
+      color: '#ffffff',
+      anchor: 'end',
+      align: 'start',
+      offset: 4,
+      font: { family: 'Rubik', size: 10 },
+      formatter: (value) => {
+        if (props.title.includes('%')) {
+          return `${value}%`
+        }
+        return value
+      }
     }
   },
   scales: {
     x: {
       grid: { color: 'rgba(255, 255, 255, 0.1)' },
-      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } }
+      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } },
+      border: { color: '#ffffff', width: 1 }
     },
     y: {
       grid: { color: 'rgba(255, 255, 255, 0.1)' },
-      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } }
+      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } },
+      border: { color: '#ffffff', width: 1 }
     }
   }
 }
@@ -47,7 +64,7 @@ const chartOptions = {
   <div class="chart-container">
     <h3 class="chart-title">{{ title }}</h3>
     <div class="chart-wrapper">
-      <Bar :data="chartData" :options="chartOptions" />
+      <Bar :data="chartData" :options="chartOptions" :plugins="[ChartDataLabels]" />
     </div>
   </div>
 </template>

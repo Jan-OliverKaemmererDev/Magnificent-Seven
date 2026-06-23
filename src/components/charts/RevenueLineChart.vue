@@ -34,17 +34,34 @@ const chartOptions = {
   plugins: {
     legend: {
       position: 'right',
-      labels: { color: '#9ca3af', font: { family: 'Rubik' } }
+      labels: { 
+        color: '#9ca3af', 
+        font: { family: 'Rubik' },
+        generateLabels: (chart) => {
+          const original = ChartJS.defaults.plugins.legend.labels.generateLabels;
+          const labels = original(chart);
+          labels.forEach(label => {
+            label.strokeStyle = '#ffffff';
+            label.lineWidth = 1;
+          });
+          return labels;
+        }
+      }
+    },
+    datalabels: {
+      display: false
     }
   },
   scales: {
     x: {
       grid: { color: 'rgba(255, 255, 255, 0.1)' },
-      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } }
+      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } },
+      border: { color: '#ffffff', width: 1 }
     },
     y: {
       grid: { color: 'rgba(255, 255, 255, 0.1)' },
-      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } }
+      ticks: { color: '#9ca3af', font: { family: 'Rubik', size: 10 } },
+      border: { color: '#ffffff', width: 1 }
     }
   },
   elements: {

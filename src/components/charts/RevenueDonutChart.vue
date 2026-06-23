@@ -19,12 +19,15 @@ const chartOptions = {
     legend: {
       position: 'right',
       labels: { color: '#9ca3af', font: { family: 'Rubik' }, padding: 20 }
+    },
+    datalabels: {
+      display: false
     }
   },
   elements: {
     arc: {
       borderWidth: 1,
-      borderColor: '#111c2a'
+      borderColor: '#ffffff'
     }
   }
 }
