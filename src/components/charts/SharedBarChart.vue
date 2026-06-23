@@ -79,6 +79,13 @@ const chartOptions = {
   flex-direction: column;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
+}
+
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;

@@ -21,19 +21,25 @@ ChartJS.register(
   Legend
 )
 
+import { computed } from 'vue'
+
 const props = defineProps({
   chartData: {
     type: Object,
     required: true
+  },
+  legendPosition: {
+    type: String,
+    default: 'right'
   }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'right',
+      position: props.legendPosition,
       labels: { 
         color: '#9ca3af', 
         font: { family: 'Rubik' },
@@ -68,7 +74,7 @@ const chartOptions = {
     line: { borderWidth: 2, tension: 0.3 },
     point: { radius: 0 }
   }
-}
+}))
 </script>
 
 <template>
@@ -90,6 +96,13 @@ const chartOptions = {
   flex-direction: column;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
+}
+
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;

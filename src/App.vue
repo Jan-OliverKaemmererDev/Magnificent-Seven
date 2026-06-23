@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import CompanyCard from './components/CompanyCard.vue'
 import RevenueLineChart from './components/charts/RevenueLineChart.vue'
 import RevenueDonutChart from './components/charts/RevenueDonutChart.vue'
@@ -18,8 +18,20 @@ const {
   revenueHistoryData 
 } = useAlphaVantage();
 
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768;
+};
+
 onMounted(() => {
   loadData();
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 
 const colors = [
@@ -145,8 +157,16 @@ const scrollLeft = () => {
 
       <!-- Middle Row: Line Chart + Donut -->
       <section class="charts-middle">
-        <RevenueLineChart :chartData="lineChartData" class="chart-line" />
-        <RevenueDonutChart :chartData="donutChartData" class="chart-donut" />
+        <RevenueLineChart 
+          :chartData="lineChartData" 
+          :legendPosition="isMobile ? 'bottom' : 'right'" 
+          class="chart-line" 
+        />
+        <RevenueDonutChart 
+          :chartData="donutChartData" 
+          :legendPosition="isMobile ? 'bottom' : 'right'" 
+          class="chart-donut" 
+        />
       </section>
 
       <!-- Bottom Row: Bar Charts -->
@@ -222,6 +242,11 @@ body {
   gap: 2rem;
 }
 
+/* Fix chart blow-out on small screens */
+.charts-middle > *, .charts-bottom > * {
+  min-width: 0;
+}
+
 .cards-wrapper {
   position: relative;
   display: flex;
@@ -292,6 +317,18 @@ body {
   }
   .charts-bottom {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding: 1rem;
+  }
+  .dashboard-content {
+    gap: 1.5rem;
+  }
+  .scroll-arrow {
+    display: none;
   }
 }
 

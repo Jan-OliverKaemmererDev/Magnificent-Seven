@@ -4,20 +4,26 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
+import { computed } from 'vue'
+
 const props = defineProps({
   chartData: {
     type: Object,
     required: true
+  },
+  legendPosition: {
+    type: String,
+    default: 'right'
   }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   cutout: '65%',
   plugins: {
     legend: {
-      position: 'right',
+      position: props.legendPosition,
       labels: { color: '#9ca3af', font: { family: 'Rubik' }, padding: 20 }
     },
     datalabels: {
@@ -30,7 +36,7 @@ const chartOptions = {
       borderColor: '#ffffff'
     }
   }
-}
+}))
 </script>
 
 <template>
@@ -53,6 +59,13 @@ const chartOptions = {
   flex-direction: column;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem;
+  }
+}
+
 .chart-title {
   color: #ffffff;
   font-size: 1.1rem;
