@@ -233,6 +233,16 @@ const scrollLeft = () => {
 /* ======================================================
    Global Resets & Accessibility
    ====================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -243,6 +253,8 @@ body {
 
 #app {
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* sr-only class for accessibility */
@@ -307,6 +319,8 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
+  min-width: 0;
 }
 
 .cards-section {
@@ -316,6 +330,8 @@ body {
   padding-bottom: 0.5rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
 }
 
 .cards-section::-webkit-scrollbar {
